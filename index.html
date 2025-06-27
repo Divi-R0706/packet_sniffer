@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Packet Sniffer Dashboard</title>
+    <meta http-equiv="refresh" content="10">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <h2>🔍 Network Traffic Logs</h2>
+
+    <form method="get">
+        <input name="ip" placeholder="Filter by IP" value="{{ ip_filter or '' }}">
+        <button type="submit">Apply Filter</button>
+    </form>
+
+    <table border="1" cellpadding="5">
+        <tr>
+            <th>Timestamp</th><th>Source IP</th><th>Dest IP</th><th>Src Port</th><th>Dst Port</th><th>Protocol</th><th>Flags</th>
+        </tr>
+        {% for log in logs %}
+        <tr {% if log[0] in suspicious_ips %}style="background-color: #ffcccc;"{% endif %}>
+            <td>{{ log[6] }}</td><td>{{ log[0] }}</td><td>{{ log[1] }}</td><td>{{ log[2] }}</td><td>{{ log[3] }}</td><td>{{ log[4] }}</td><td>{{ log[5] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h2>📈 Packets Per Minute</h2>
+    <canvas id="trafficChart" width="600" height="250"></canvas>
+    <script>
+        const ctx = document.getElementById('trafficChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: {{ times | safe }},
+                datasets: [{
+                    label: 'Packets/Minute',
+                    data: {{ counts | safe }},
+                    borderColor: 'blue',
+                    borderWidth: 2,
+                    fill: false,
+                    tension: 0.2
+                }]
+            },
+            options: {
+                scales: { y: { beginAtZero: true } }
+            }
+        });
+    </script>
+</body>
+</html>
