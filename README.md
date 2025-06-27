@@ -34,9 +34,6 @@ pip install scapy flask
 Update Email Credentials
 In packet_sniffer_alert.py, set:
 
-python
-Copy
-Edit
 sender = 'your_email@gmail.com'
 receiver = 'receiver_email@gmail.com'
 app_password = 'your_app_password'
@@ -64,5 +61,13 @@ You should see:
 Packets getting logged
 Email alert triggered
 Suspicious IP listed in the dashboard
+
+flow:
+packet_sniffer_project/
+├── packet_sniffer_alert.py # Core sniffer + alert system
+├── app.py # Flask dashboard
+├── packets.db # Auto-generated SQLite database
+└── templates/
+└── index.html # Web dashboard UI
 
 
